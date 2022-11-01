@@ -1,8 +1,8 @@
 import * as mysql from "mariadb";
 
-import {DatabaseDriver, Operators, QueryType} from "../typings/enum";
-import {QueryOptions} from "../typings/query";
-import {IDatabase, IDatabaseMySQLConfig} from "../typings/database";
+import {Operators, QueryType} from "../types/enum";
+import {QueryOptions} from "../types/query";
+import {IDatabase, IDatabaseMySQLConfig} from "../types/database";
 
 export class Database implements IDatabase {
     readonly version = "mariadb-" + mysql.version;
@@ -69,7 +69,7 @@ export class Database implements IDatabase {
                 reject(err);
             } finally {
                 if (conn) conn.end();
-                return resolve(res);
+                resolve(res);
             }
         });
     };

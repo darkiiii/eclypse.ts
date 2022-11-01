@@ -1,6 +1,6 @@
 import newDatabase from "./lib/database/database";
 
-import {DatabaseDriver, Operators, QueryType} from "./lib/database/typings/enum";
+import {DatabaseDriver, Operators, QueryType} from "./lib/database/types/enum";
 
 async function TestDB () {
     const db = await newDatabase({driver: DatabaseDriver.LOCAL});

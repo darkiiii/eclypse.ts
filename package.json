@@ -48,7 +48,6 @@
   "devDependencies": {
     "@darki_/logger": "2.0.1",
     "@types/node": "^18.11.3",
-    "dotenv": "^16.0.3",
     "eslint": "^8.26.0",
     "eslint-config-neon": "^0.1.39",
     "mariadb": "^3.0.2",

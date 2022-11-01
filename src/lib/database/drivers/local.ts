@@ -1,8 +1,8 @@
 import * as fs from "node:fs";
 
-import {QueryType} from "../typings/enum";
-import {QueryOptions} from "../typings/query";
-import {IDatabase, IDatabaseLocalConfig} from "../typings/database";
+import {QueryType} from "../types/enum";
+import {QueryOptions} from "../types/query";
+import {IDatabase, IDatabaseLocalConfig} from "../types/database";
 
 export class Database implements IDatabase {
     readonly version = "fs-internal";

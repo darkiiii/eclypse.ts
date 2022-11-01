@@ -1,6 +1,6 @@
-import {QueryType} from "../typings/enum";
-import {QueryOptions} from "../typings/query";
-import {IDatabase, IDatabaseLocalConfig, IDatabaseSQLiteConfig} from "../typings/database";
+import {QueryType} from "../types/enum";
+import {QueryOptions} from "../types/query";
+import {IDatabase, IDatabaseSQLiteConfig} from "../types/database";
 
 export class Database implements IDatabase {
     readonly version = "sqlite-";

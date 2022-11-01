@@ -1,5 +1,5 @@
-import {IDatabase, IDatabaseConfig} from "./typings/database";
-import {DatabaseDriver} from "./typings/enum";
+import {IDatabase, IDatabaseConfig} from "./types/database";
+import {DatabaseDriver} from "./types/enum";
 
 export default async function registerDatabase(config: IDatabaseConfig = {driver: DatabaseDriver.LOCAL}): Promise<IDatabase> {
     return new Promise((resolve, reject) => {
