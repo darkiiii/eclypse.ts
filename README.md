@@ -1,11 +1,11 @@
-# discord-framework
+# eclypse.ts
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
 [![build](https://github.com/darkiiii/eclypse.ts/actions/workflows/build.yml/badge.svg)](https://github.com/darkiiii/eclypse.ts/actions/workflows/build.yml)
 [![lint](https://github.com/darkiiii/eclypse.ts/actions/workflows/lint.yml/badge.svg)](https://github.com/darkiiii/eclypse.ts/actions/workflows/lint.yml)
 
-> A simple logging system using colors and can log to files and TTYs.
+> A discord.js bot framework made for simplicity of use and sustainability.
 
 ## Usage
 
