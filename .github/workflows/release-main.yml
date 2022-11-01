@@ -1,0 +1,38 @@
+on:
+  push:
+    branches:
+      - main
+name: release-please
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Run release-please"
+        uses: google-github-actions/release-please-action@v3
+        id: release
+        with:
+          release-type: node
+          package-name: "@darki_/eclypse.ts"
+      - name: "Checkout"
+        uses: actions/checkout@v3
+        if: ${{ steps.release.outputs.release_created }}
+      - name: "Install pnpm"
+        uses: pnpm/action-setup@v2.2.4
+        if: ${{ steps.release.outputs.release_created }}
+      - name: "Install dependencies"
+        run: pnpm install
+        if: ${{ steps.release.outputs.release_created }}
+      - name: "Run lint"
+        run: pnpm lint
+        if: ${{ steps.release.outputs.release_created }}
+      - name: "Run build"
+        run: pnpm build
+        if: ${{ steps.release.outputs.release_created }}
+      # Publish to npm:
+      - name: Publish Packages
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          pnpm config set "//registry.npmjs.org/:_authToken" "${NPM_TOKEN}"
+          pnpm publish --access=public
+        if: ${{ steps.release.outputs.release_created }}
