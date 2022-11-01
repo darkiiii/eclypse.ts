@@ -1,18 +1,18 @@
-import {Operators, QueryType} from "./enum";
+import type {Operators, QueryType} from "./enum";
 
 export interface  DefaultQueryOptions {
-    type: QueryType;
     table: string;
+    type: QueryType;
 }
 
 export interface ConditionalQueryOptions extends DefaultQueryOptions {
-    condition?: {operator: Operators, key: string, value?: any}[];
+    condition?: {key: string, operator: Operators, value?: any}[];
 }
 
 export interface SelectQueryOptions extends ConditionalQueryOptions {
-    type: QueryType.Select;
     fields?: string[];
     limit?: number;
+    type: QueryType.Select;
 }
 
 // Insert does not take conditions
@@ -22,12 +22,12 @@ export interface InsertQueryOptions extends DefaultQueryOptions {
 }
 
 export interface UpdateQueryOptions extends ConditionalQueryOptions {
-    type: QueryType.Update;
     modifier: {key: string, value: any}[];
+    type: QueryType.Update;
 }
 
 export interface DeleteQueryOptions extends ConditionalQueryOptions {
     type: QueryType.Delete;
 }
 
-export type QueryOptions = SelectQueryOptions | InsertQueryOptions | UpdateQueryOptions | DeleteQueryOptions;
+export type QueryOptions = DeleteQueryOptions | InsertQueryOptions | SelectQueryOptions | UpdateQueryOptions;

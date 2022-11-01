@@ -1,9 +1,9 @@
-import * as mysql from "mariadb";
-import {QueryOptions} from "./query";
-import {DatabaseDriver} from "./enum";
+import type * as mysql from "mariadb";
+import type {DatabaseDriver} from "./enum";
+import type {QueryOptions} from "./query";
 
 export interface IDatabase {
-    query: (opts: QueryOptions) => Promise<any>;
+    query(opts: QueryOptions): Promise<any>;
 }
 
 export interface IDatabaseCommonConfig {
@@ -23,4 +23,4 @@ export interface IDatabaseMySQLConfig extends IDatabaseCommonConfig, mysql.PoolC
     driver: DatabaseDriver.MYSQL;
 }
 
-export type IDatabaseConfig = IDatabaseLocalConfig | IDatabaseSQLiteConfig | IDatabaseMySQLConfig;
+export type IDatabaseConfig = IDatabaseLocalConfig | IDatabaseMySQLConfig | IDatabaseSQLiteConfig;

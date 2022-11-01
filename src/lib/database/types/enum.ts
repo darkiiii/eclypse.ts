@@ -1,33 +1,33 @@
 export enum QueryType {
-    Select = "SELECT",
+    Delete = "DELETE",
     Insert = "INSERT INTO",
-    Update = "UPDATE",
-    Delete = "DELETE"
+    Select = "SELECT",
+    Update = "UPDATE"
 }
 
 export enum DataType {
-    INT = "INT",
     FLOAT = "FLOAT",
-    VARCHAR = "VARCHAR",
-    JSON = "JSON"
+    INT = "INT",
+    JSON = "JSON",
+    VARCHAR = "VARCHAR"
 }
 
 export enum Operators {
     EQ = "=",
-    SEQ = "<=>",
-    NEQ = "!=",
     GT = ">",
     GTE = ">=",
+    IN = "IN",
     LT = "<",
     LTE = "<=",
-    IN = "IN",
+    NEQ = "!=",
     NIN = "NOT IN",
+    NNULL = "IS NOT NULL",
     NULL = "IS NULL",
-    NNULL = "IS NOT NULL"
+    SEQ = "<=>"
 }
 
 export enum DatabaseDriver {
     LOCAL = 'local',
-    SQLITE = 'sqlite',
-    MYSQL = 'mysql'
+    MYSQL = 'mysql',
+    SQLITE = 'sqlite'
 }

@@ -1,9 +1,10 @@
-import {ILogger} from "./interfaces/logger";
-import {IBot} from "./interfaces/bot";
-import {Client, ClientOptions} from "discord.js";
+import type { ClientOptions} from "discord.js";
+import {Client} from "discord.js";
+import type {IBot} from "./interfaces/bot";
+import type {ILogger} from "./interfaces/logger";
 
 export class Bot extends Client implements IBot {
-    readonly logger: ILogger;
+    public readonly logger: ILogger;
 
     public constructor(logger: ILogger, options: ClientOptions) {
         super(options);

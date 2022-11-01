@@ -1,20 +1,19 @@
 import * as mysql from "mariadb";
-
+import type {IDatabase, IDatabaseMySQLConfig} from "../types/database";
 import {Operators, QueryType} from "../types/enum";
-import {QueryOptions} from "../types/query";
-import {IDatabase, IDatabaseMySQLConfig} from "../types/database";
+import type {QueryOptions} from "../types/query";
 
 export class Database implements IDatabase {
-    readonly version = "mariadb-" + mysql.version;
+    public readonly version = "mariadb-" + mysql.version;
 
-    private _pool: mysql.Pool;
+    private readonly _pool: mysql.Pool;
 
-    constructor(config: IDatabaseMySQLConfig) {
+    public constructor(config: IDatabaseMySQLConfig) {
         this._pool = mysql.createPool(config);
     }
 
     public async query(opts: QueryOptions): Promise<any> {
-        return new Promise(async (resolve, reject) => {
+        return new Promise((resolve, reject) => {
             const query: any[] = [opts.type];
             switch (opts.type) {
                 case QueryType.Select:
@@ -45,46 +44,44 @@ export class Database implements IDatabase {
                     query.push(`FROM \`${opts.table}\``);
                     break;
             }
+
             if ("condition" in opts && opts.condition) {
                 query.push("WHERE");
                 query.push(opts.condition.map((val, key) => {
-                    let str = "\"" + key + "\" " + val.operator + " ";
+                    let str = "\"" + key.toString() + "\" " + val.operator + " ";
                     switch (typeof val.value) {
                         case "string":
-                            str += (val.operator === Operators.OTHER) ? val.value : ("\"" + val.value + "\"");
+                            if (val.operator === Operators.IN || val.value === "") {
+                                str += val.value
+                            } else {
+                                str += "\"" + val.value + "\""
+                            }
+
                             break;
                         default:
                             str += val.value;
                             break;
                     }
+
                     return str;
                 }).join(" AND "));
             }
 
-            let conn; let res: any;
-            try {
-                conn = await this._pool.getConnection();
-                res = JSON.parse(await conn.query(this.json_resolve(query.join(" ") + ";")));
-            } catch (err) {
-                reject(err);
-            } finally {
-                if (conn) conn.end();
-                resolve(res);
-            }
+            void this.run(query.join(" ") + ";", resolve, reject);
         });
     };
 
-    private json_resolve(str: string) {
-        str = str.replace(/\\n/g, "\\n")
-            .replace(/\\'/g, "\\'")
-            .replace(/\\"/g, '\\"')
-            .replace(/\\&/g, "\\&")
-            .replace(/\\r/g, "\\r")
-            .replace(/\\t/g, "\\t")
-            .replace(/\\b/g, "\\b")
-            .replace(/\\f/g, "\\f");
-        // remove non-printable and other non-valid JSON chars
-        str = str.replace(/[\u0000-\u001F]+/g, "");
-        return str;
-    };
+    private async run(query: string, resolve: (value: IDatabase) => void, reject: (reason: any) => void): Promise<void> {
+        let conn;
+        let res: any;
+        try {
+            conn = await this._pool.getConnection();
+            res = JSON.parse(await conn.query(query));
+        } catch (error) {
+            reject(error);
+        } finally {
+            if (conn) await conn.end();
+            resolve(res);
+        }
+    }
 }

@@ -1,6 +1,6 @@
+import type {IDatabase, IDatabaseSQLiteConfig} from "../types/database";
 import {QueryType} from "../types/enum";
-import {QueryOptions} from "../types/query";
-import {IDatabase, IDatabaseSQLiteConfig} from "../types/database";
+import type {QueryOptions} from "../types/query";
 
 export class Database implements IDatabase {
     readonly version = "sqlite-";
@@ -22,21 +22,8 @@ export class Database implements IDatabase {
                 case QueryType.Delete:
 
             }
+
             resolve("bite");
         });
-    };
-
-    private json_resolve(str: string) {
-        str = str.replace(/\\n/g, "\\n")
-            .replace(/\\'/g, "\\'")
-            .replace(/\\"/g, '\\"')
-            .replace(/\\&/g, "\\&")
-            .replace(/\\r/g, "\\r")
-            .replace(/\\t/g, "\\t")
-            .replace(/\\b/g, "\\b")
-            .replace(/\\f/g, "\\f");
-        // remove non-printable and other non-valid JSON chars
-        str = str.replace(/[\u0000-\u001F]+/g, "");
-        return str;
     };
 }

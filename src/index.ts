@@ -1,5 +1,4 @@
 import newDatabase from "./lib/database/database";
-
 import {DatabaseDriver, Operators, QueryType} from "./lib/database/types/enum";
 
 async function TestDB () {
@@ -10,7 +9,7 @@ async function TestDB () {
         table: "mekapet",
         condition: [
             {operator: Operators.EQ, key: "chouette", value: "truc"},
-            {operator: Operators.OTHER, key: "super", value: "IS NOT NULL"}
+            {operator: Operators.NNULL, key: "super", value: ""}
         ],
         fields: ["machin", "bidule"]
     });
@@ -48,11 +47,12 @@ async function TestDB () {
         table: "table",
         condition: [
             {operator: Operators.EQ, key: "chouette", value: "truc"},
-            {operator: Operators.OTHER, key: "super", value: "IS NOT NULL"}
+            {operator: Operators.NNULL, key: "super", value: ""}
         ]
     });
     console.log("Query 5 :")
     console.log(q5)
 }
+
 console.log("Bonjour")
-TestDB();
+void TestDB();
