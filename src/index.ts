@@ -6,7 +6,7 @@ async function TestDB () {
     const db = await newDatabase({driver: DatabaseDriver.LOCAL});
 
     const q2 = await db.query({
-        type: QueryType.Select,
+        type: 1,
         table: "mekapet",
         condition: [
             {operator: Operators.EQ, key: "chouette", value: "truc"},
@@ -17,7 +17,7 @@ async function TestDB () {
     console.log("Query 2 :")
     console.log(q2)
     const q3 = await db.query({
-        type: QueryType.Insert,
+        type: 2,
         table: "table",
         values: [
             {key: "truc", value: "bidule"},
@@ -28,13 +28,13 @@ async function TestDB () {
     console.log("Query 3 :")
     console.log(q3)
     const q1 = await db.query({
-        type: QueryType.Select,
+        type: 1,
         table: "table"
     });
     console.log("Query 1 :")
     console.log(q1)
     const q4 = await db.query({
-        type: QueryType.Update,
+        type: 3,
         table: "table",
         modifier: [
             {key: "truc", value: "machin"},
@@ -44,7 +44,7 @@ async function TestDB () {
     console.log("Query 4 :")
     console.log(q4)
     const q5 = await db.query({
-        type: QueryType.Delete,
+        type: 4,
         table: "table",
         condition: [
             {operator: Operators.EQ, key: "chouette", value: "truc"},

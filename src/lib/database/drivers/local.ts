@@ -22,7 +22,7 @@ export class Database implements IDatabase {
             const json = JSON.parse(fs.readFileSync(file).toString()).table;
             const res: any[number][string] = [];
             switch (opts.type) {
-                case QueryType.Select:
+                case 1: case QueryType.Select:
                     let num: number = 0;
                     for (const row of json) {
                         let passed = true
@@ -42,7 +42,7 @@ export class Database implements IDatabase {
                         }
                     }
                     break;
-                case QueryType.Insert:
+                case 2: case QueryType.Insert:
                     for (const row of json) if (opts.values[0].value === row[opts.values[0].key]) return reject("Row already exists.");
                     const res_row: any[string] = {};
                     for (const val of opts.values) res_row[val.key] = val.value;
@@ -50,7 +50,7 @@ export class Database implements IDatabase {
                     res.push(res_row);
                     fs.writeFileSync(file, this.json_resolve(JSON.stringify({table: json})));
                     break;
-                case QueryType.Update:
+                case 3: case QueryType.Update:
                     for (const key in json) {
                         let passed = true
                         if (opts.condition) for (const cond of opts.condition) {
@@ -63,7 +63,7 @@ export class Database implements IDatabase {
                     }
                     fs.writeFileSync(file, this.json_resolve(JSON.stringify({table: json})));
                     break;
-                case QueryType.Delete:
+                case 4: case QueryType.Delete:
                     for (const key in json) {
                         let passed = true
                         if (opts.condition) for (const cond of opts.condition) {
