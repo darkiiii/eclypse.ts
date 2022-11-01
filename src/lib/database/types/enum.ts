@@ -20,7 +20,10 @@ export enum Operators {
     GTE = ">=",
     LT = "<",
     LTE = "<=",
-    OTHER = ""
+    IN = "IN",
+    NIN = "NOT IN",
+    NULL = "IS NULL",
+    NNULL = "IS NOT NULL"
 }
 
 export enum DatabaseDriver {

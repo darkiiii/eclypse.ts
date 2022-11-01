@@ -1,6 +1,6 @@
 import * as fs from "node:fs";
 
-import {QueryType} from "../types/enum";
+import {Operators, QueryType} from "../types/enum";
 import {QueryOptions} from "../types/query";
 import {IDatabase, IDatabaseLocalConfig} from "../types/database";
 
@@ -25,10 +25,7 @@ export class Database implements IDatabase {
                 case QueryType.Select:
                     let num: number = 0;
                     for (const row of json) {
-                        let passed = true
-                        if (opts.condition) for (const cond of opts.condition) {
-                            if (cond.value !== row[cond.key]) passed = false;
-                        }
+                        const passed = this.condition(opts, row);
                         if (passed) {
                             const res_row: any[string] = {};
                             if (opts.fields) for (const field of opts.fields) {
@@ -52,10 +49,7 @@ export class Database implements IDatabase {
                     break;
                 case QueryType.Update:
                     for (const key in json) {
-                        let passed = true
-                        if (opts.condition) for (const cond of opts.condition) {
-                            if (cond.value !== json[key][cond.key]) passed = false;
-                        }
+                        const passed = this.condition(opts, json[key]);
                         if (passed) {
                             for (const val of opts.modifier) json[key][val.key] = val.value;
                             res.push(json[key]);
@@ -65,10 +59,7 @@ export class Database implements IDatabase {
                     break;
                 case QueryType.Delete:
                     for (const key in json) {
-                        let passed = true
-                        if (opts.condition) for (const cond of opts.condition) {
-                            if (cond.value !== json[key][cond.key]) passed = false;
-                        }
+                        const passed = this.condition(opts, json[key]);
                         if (passed) res.push(json.splice(key, 1));
                     }
                     fs.writeFileSync(file, this.json_resolve(JSON.stringify({table: json})));
@@ -77,6 +68,47 @@ export class Database implements IDatabase {
             resolve(res);
         });
     };
+
+    private condition(opts: QueryOptions, row: any[string]) {
+        let passed = true;
+        if ("condition" in opts && opts.condition) for (const cond of opts.condition) {
+            switch (cond.operator) {
+                case Operators.EQ:
+                case Operators.SEQ:
+                    if (cond.value != row[cond.key]) passed = false;
+                    break;
+                case Operators.NEQ:
+                    if (cond.value == row[cond.key]) passed = false;
+                    break;
+                case Operators.GT:
+                    if (cond.value > row[cond.key]) passed = false;
+                    break;
+                case Operators.GTE:
+                    if (cond.value >= row[cond.key]) passed = false;
+                    break;
+                case Operators.LT:
+                    if (cond.value < row[cond.key]) passed = false;
+                    break;
+                case Operators.LTE:
+                    if (cond.value <= row[cond.key]) passed = false;
+                    break;
+                case Operators.IN:
+                    for (const val of cond.value) if (val == row[cond.key]) break;
+                    passed = false;
+                    break;
+                case Operators.NIN:
+                    for (const val of cond.value) if (val == row[cond.key]) passed = false;
+                    break;
+                case Operators.NULL:
+                    if (null != row[cond.key]) passed = false;
+                    break;
+                case Operators.NNULL:
+                    if (null == row[cond.key]) passed = false;
+                    break;
+            }
+        }
+        return passed;
+    }
 
     private json_resolve(str: string) {
         str = str.replace(/\\n/g, "\\n")
